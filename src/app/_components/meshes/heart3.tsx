@@ -3,7 +3,13 @@ import { a, useSpring, useSpringRef } from '@react-spring/three';
 import HeartGeometry from './heart-geometry';
 import { Text } from '@react-three/drei';
 
-export default function Heart3({ name, message, position: originalPosition }) {
+interface Heart3Props {
+  name: string;
+  message: string;
+  position: [number, number, number];
+}
+
+export default function Heart3({ name, message, position: originalPosition }: Heart3Props) {
   const mesh = useRef();
   const [active, setActive] = useState(false);
   const [finished, setFinished] = useState(true);
@@ -33,7 +39,7 @@ export default function Heart3({ name, message, position: originalPosition }) {
   });
 
     // Function to calculate font size based on text length
-    const calculateFontSize = (text) => {
+    const calculateFontSize = (text: string) => {
       const baseSize = 2.8; // Base font size
       const maxLength = 20; // Maximum length before scaling down
       return Math.max(baseSize - (text.length / maxLength) * baseSize, 0.5);
@@ -45,9 +51,9 @@ export default function Heart3({ name, message, position: originalPosition }) {
   // Chain animations
   return (
     <a.mesh
-      rotation={rotation}
+      rotation={rotation as any}
       position-y={(!active && finished) ? floatPosition : null}
-      position={position}
+      position={position as any}
       scale={scale}
       onClick={(e) => {
         e.stopPropagation();
@@ -61,7 +67,7 @@ export default function Heart3({ name, message, position: originalPosition }) {
         color="white"
         anchorX="center"
         textAlign="center"
-        anchorY="center"
+        anchorY="middle"
         maxWidth={22}
         position={[0, 4, 2]}
         lineHeight={1.2}
