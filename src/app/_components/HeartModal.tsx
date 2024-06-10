@@ -39,7 +39,7 @@ const HeartModal: React.FC = () => {
       modalRef.current?.dismiss();
       formRef.current?.reset();
     }
-    Toast.create({ message: formState.message }).present();
+    //Toast.create({ message: formState.message }).present();
   }, [formState]);
   return (
     <>
