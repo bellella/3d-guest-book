@@ -18,6 +18,19 @@ export default function Heart3({ name, message, position: originalPosition }: He
   const positionRef = useSpringRef();
   let floatRef = useSpringRef();
   
+    // Function to calculate font size based on text length
+    const calculateFontSize = (text: string) => {
+      const baseSize = 2.8; // Base font size
+      const maxLength = 20; // Maximum length before scaling down
+      return Math.max(baseSize - (text.length / maxLength) * baseSize, 0.5);
+    };
+
+    const calculateScale = () => {
+      if (window.innerWidth < 600) return 0.2; // Small screens
+      if (window.innerWidth < 1200) return 0.3; // Medium screens
+      return 0.4; // Large screens
+    };
+
   // Floating animation
   const { floatPosition } = useSpring({
     from: { floatPosition: originalPosition[1] },
@@ -29,7 +42,7 @@ export default function Heart3({ name, message, position: originalPosition }: He
 
     const { position, scale, rotation } = useSpring({
     position: active ? [0,0,50] : originalPosition,
-    scale: active ? 0.4 : 0.3,
+    scale: active ? calculateScale()+0.1 : calculateScale(),
     rotation: !active ? [0, Math.PI, 0] : [0, 0, 0],
     config: { duration: 1000 },
     onRest: () => {
@@ -38,12 +51,6 @@ export default function Heart3({ name, message, position: originalPosition }: He
     }
   });
 
-    // Function to calculate font size based on text length
-    const calculateFontSize = (text: string) => {
-      const baseSize = 2.8; // Base font size
-      const maxLength = 20; // Maximum length before scaling down
-      return Math.max(baseSize - (text.length / maxLength) * baseSize, 0.5);
-    };
 
     const fontSize = calculateFontSize(message);
 
