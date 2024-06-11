@@ -1,19 +1,15 @@
 "use client";
 import React, { useEffect } from "react";
-import { MiModalRefInterface, MiModal } from "@milibrary/react-interaction";
-import { Div, Font, Button, Input, Flex } from "@milibrary/mi-style";
-import { Toast } from "@milibrary/core";
 import { useFormState } from "react-dom";
 import submitMessage from "@/lib/actions/form.action";
-import { Textarea } from "./mis/Textarea";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Cross2Icon, EnvelopeClosedIcon } from "@radix-ui/react-icons";
+import Toast, { ToastHandle } from "./Toast";
 
 const HeartModal: React.FC = () => {
   const [formState, action] = useFormState(submitMessage, {});
-  const modalRef = React.useRef<MiModalRefInterface>(null);
+  const toastRef = React.useRef<ToastHandle>(null);
   const formRef = React.useRef<HTMLFormElement>(null);
-
   const [isOpen, setIsOpen] = React.useState(false); // Track the open/close state
   const [isClosing, setIsClosing] = React.useState(false); // Track the closing state
 
@@ -27,7 +23,7 @@ const HeartModal: React.FC = () => {
     setTimeout(() => {
       setIsOpen(false);
       setIsClosing(false);
-    }, 300); // Duration should match the animation duration
+    }, 300);
   };
 
   React.useEffect(() => {
@@ -36,13 +32,17 @@ const HeartModal: React.FC = () => {
     }
     if (formState.success) {
       console.log(formState, "???");
-      modalRef.current?.dismiss();
+      toastRef.current?.showToast();
       formRef.current?.reset();
     }
-    //Toast.create({ message: formState.message }).present();
   }, [formState]);
   return (
     <>
+      <Toast
+        ref={toastRef}
+        title="Notification"
+        description="This is a toast notification!"
+      />
       <Dialog.Root open={isOpen}>
         <Dialog.Trigger asChild>
           <button
@@ -91,11 +91,12 @@ const HeartModal: React.FC = () => {
                       Message
                     </label>
                     <label htmlFor=""></label>
-                    <textarea name="message" className="input-base" />
+                    <textarea name="message" className="input-base resize-none" />
                   </div>
                 </Dialog.Description>
                 <div className="mt-4 flex justify-center">
                   <button
+                    type="submit"
                     onClick={handleClose}
                     className="px-4 py-2 bg-purple-500 text-purple-100 rounded"
                   >
@@ -103,6 +104,7 @@ const HeartModal: React.FC = () => {
                   </button>
                 </div>
                 <button
+                  type="button"
                   onClick={handleClose}
                   className="absolute top-2 right-2 p-1"
                 >
@@ -113,27 +115,6 @@ const HeartModal: React.FC = () => {
           </Dialog.Portal>
         )}
       </Dialog.Root>
-      {/* <MiModal ref={modalRef} >
-        <Div
-          className="modall"
-          set="level-1"
-          padding={[5]}
-          background="hotpink"
-          color="onSurface"
-        >
-       
-        </Div>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width={0}
-          height={0}
-          viewBox="0 0 512 512"
-        >
-          <clipPath id="heartClip" clipPathUnits="objectBoundingBox">
-            <path d="M0.5,1 C0.5,1,0,0.7,0,0.3 A0.25,0.25,1,1,1,0.5,0.3 A0.25,0.25,1,1,1,1,0.3 C1,0.7,0.5,1,0.5,1 Z"></path>
-          </clipPath>
-        </svg>
-      </MiModal> */}
     </>
   );
 };

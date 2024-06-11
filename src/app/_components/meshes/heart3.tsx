@@ -1,37 +1,32 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { a, useSpring, useSpringRef } from '@react-spring/three';
+import { a, useSpring } from '@react-spring/three';
 import HeartGeometry from './heart-geometry';
 import { Text } from '@react-three/drei';
 
 interface Heart3Props {
   name: string;
   message: string;
-  position: [number, number, number];
+  position: number[];
+  isActive: boolean;
+  onClick: () => void;
 }
 
-export default function Heart3({ name, message, position: originalPosition }: Heart3Props) {
+export default function Heart3({ name, message, position: originalPosition, isActive, onClick }: Heart3Props) {
   const mesh = useRef();
-  const [active, setActive] = useState(false);
   const [finished, setFinished] = useState(true);
-  
-  // Spring refs for chaining
-  const positionRef = useSpringRef();
-  let floatRef = useSpringRef();
-  
-    // Function to calculate font size based on text length
-    const calculateFontSize = (text: string) => {
-      const baseSize = 2.8; // Base font size
-      const maxLength = 20; // Maximum length before scaling down
-      return Math.max(baseSize - (text.length / maxLength) * baseSize, 0.5);
-    };
 
-    const calculateScale = () => {
-      if (window.innerWidth < 600) return 0.2; // Small screens
-      if (window.innerWidth < 1200) return 0.3; // Medium screens
-      return 0.4; // Large screens
-    };
+  const calculateFontSize = (text: string) => {
+    const baseSize = 2.8; // Base font size
+    const maxLength = 20; // Maximum length before scaling down
+    return Math.max(baseSize - (text.length / maxLength) * baseSize, 0.5);
+  };
 
-  // Floating animation
+  const calculateScale = () => {
+    if (window.innerWidth < 600) return 0.2; // Small screens
+    if (window.innerWidth < 1200) return 0.3; // Medium screens
+    return 0.4; // Large screens
+  };
+
   const { floatPosition } = useSpring({
     from: { floatPosition: originalPosition[1] },
     to: { floatPosition: originalPosition[1] - 0.7 },
@@ -40,38 +35,34 @@ export default function Heart3({ name, message, position: originalPosition }: He
     delay: Math.floor(Math.random() * 500),
   });
 
-    const { position, scale, rotation } = useSpring({
-    position: active ? [0,0,50] : originalPosition,
-    scale: active ? calculateScale()+0.1 : calculateScale(),
-    rotation: !active ? [0, Math.PI, 0] : [0, 0, 0],
+  const { position, scale, rotation } = useSpring({
+    position: isActive ? [0, 0, 50] : originalPosition,
+    scale: isActive ? calculateScale() + 0.1 : calculateScale(),
+    rotation: !isActive ? [0, Math.PI, 0] : [0, 0, 0],
     config: { duration: 1000 },
     onRest: () => {
-      console.log("Animation finished!");
       setFinished(true);
     }
   });
 
+  const fontSize = calculateFontSize(message);
 
-    const fontSize = calculateFontSize(message);
-
-
-  // Chain animations
   return (
     <a.mesh
       rotation={rotation as any}
-      position-y={(!active && finished) ? floatPosition : null}
+      position-y={(!isActive && finished) ? floatPosition : null}
       position={position as any}
       scale={scale}
       onClick={(e) => {
         e.stopPropagation();
-        setFinished(false);
-        setActive(!active);
+        if (finished) { // 애니메이션이 끝난 상태일 때만 클릭 허용
+          onClick();
+        }
       }}
     >
       <HeartGeometry />
       <meshStandardMaterial color="#ff4d89" />
       <Text
-        color="white"
         anchorX="center"
         textAlign="center"
         anchorY="middle"
@@ -79,11 +70,11 @@ export default function Heart3({ name, message, position: originalPosition }: He
         position={[0, 4, 2]}
         lineHeight={1.2}
       >
-        <Text fontSize={1.7} position-y={0}>
-        name: {name}
+        <Text color="black" fontSize={1.7} position-y={0}>
+          From {name}
         </Text>
-        <Text fontSize={fontSize} position-y={-3}>
-        {message}
+        <Text color="black" fontSize={fontSize} position-y={-3}>
+          {message}
         </Text>
       </Text>
     </a.mesh>

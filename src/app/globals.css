@@ -62,7 +62,7 @@ a {
   }
 
   .input-base {
-    @apply py-2 px-3 border border-gray-300 focus:border-purple-500 focus:outline-none rounded-lg;
+    @apply block py-2 px-3 border border-gray-300 focus:border-purple-500 focus:outline-none rounded-lg;
   }
 
   .label-base {
