@@ -5,8 +5,11 @@ import submitMessage from "@/lib/actions/form.action";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Cross2Icon, EnvelopeClosedIcon } from "@radix-ui/react-icons";
 import Toast, { ToastHandle } from "./Toast";
+import useMessageStore from "@/lib/stores/message.store";
 
-const HeartModal: React.FC = () => {
+const HeartModal: React.FC = React.memo(() => {
+  const addGuestMessage = useMessageStore((state) => state.addGuestMessage);
+
   const [formState, action] = useFormState(submitMessage, {});
   const toastRef = React.useRef<ToastHandle>(null);
   const formRef = React.useRef<HTMLFormElement>(null);
@@ -31,17 +34,17 @@ const HeartModal: React.FC = () => {
       return;
     }
     if (formState.success) {
-      console.log(formState, "???");
+      addGuestMessage(formState.submission);
       toastRef.current?.showToast();
       formRef.current?.reset();
     }
-  }, [formState]);
+  }, [formState, addGuestMessage]);
   return (
     <>
       <Toast
         ref={toastRef}
-        title="Notification"
-        description="This is a toast notification!"
+        title="Thank you!"
+        description="Buy me a coffee or donate 3d models"
       />
       <Dialog.Root open={isOpen}>
         <Dialog.Trigger asChild>
@@ -54,46 +57,35 @@ const HeartModal: React.FC = () => {
         </Dialog.Trigger>
         {isOpen && (
           <Dialog.Portal>
-            {/* <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width={0}
-              height={0}
-              viewBox="0 0 512 512"
-            >
-              <clipPath id="heartClip" clipPathUnits="objectBoundingBox">
-                <path d="M0.5,1 C0.5,1,0,0.7,0,0.3 A0.25,0.25,1,1,1,0.5,0.3 A0.25,0.25,1,1,1,1,0.3 C1,0.7,0.5,1,0.5,1 Z"></path>
-              </clipPath>
-            </svg> */}
             <Dialog.Content
-              className={`bg-purple-200 border-purple-300 border border-dashed border-2 fixed left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 p-6 rounded-lg shadow-lg transition-all ease-out ${
+              className={`fixed-center bg-purple-200 border-purple-300 border border-dashed border-2 p-6 rounded-lg shadow-lg transition-all ease-out ${
                 isClosing ? "animate-slide-down" : "animate-slide-up"
               } focus:outline-none`}
             >
+              <Dialog.Title className="text-xl font-bold text-purple-800 mb-3">
+                Leave a message!
+              </Dialog.Title>
               <form action={action}>
-                <Dialog.Title className="text-xl font-bold text-purple-800">
-                  Leave a message!
-                </Dialog.Title>
-                <Dialog.Description className="mt-5">
-                  <div>
-                    <label htmlFor="name" className="label-base">
-                      Name
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      name="name"
-                      className="mt-1 input-base"
-                      required
-                    />
-                  </div>
-                  <div className="mt-2">
-                    <label htmlFor="name" className="label-base">
-                      Message
-                    </label>
-                    <label htmlFor=""></label>
-                    <textarea name="message" className="input-base resize-none" />
-                  </div>
-                </Dialog.Description>
+                <div>
+                  <label htmlFor="name" className="label-base">
+                    Name
+                  </label>
+                  <input
+                    id="name"
+                    type="text"
+                    name="name"
+                    className="mt-1 input-base"
+                    maxLength={12}
+                    required
+                  />
+                </div>
+                <div className="mt-2">
+                  <label htmlFor="name" className="label-base">
+                    Message
+                  </label>
+                  <label htmlFor=""></label>
+                  <textarea maxLength={150} name="message" className="input-base resize-none" />
+                </div>
                 <div className="mt-4 flex justify-center">
                   <button
                     type="submit"
@@ -117,6 +109,8 @@ const HeartModal: React.FC = () => {
       </Dialog.Root>
     </>
   );
-};
+});
+
+HeartModal.displayName = "HeartModal";
 
 export default HeartModal;

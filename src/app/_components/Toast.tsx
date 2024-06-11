@@ -18,24 +18,21 @@ const Toast = React.forwardRef<ToastHandle, ToastProps>((props, ref) => {
   React.useImperativeHandle(ref, () => ({
     showToast() {
       setOpen(true);
-      setTimeout(() => setOpen(false), 3000);
+      //setTimeout(() => setOpen(false), 1500);
     }
   }));
 
   return (
-    <ToastPrimitive.Provider swipeDirection="right">
+    <ToastPrimitive.Provider swipeDirection="down" duration={3000}>
       <ToastPrimitive.Root
         open={open}
         onOpenChange={setOpen}
-        className="fixed bottom-4 right-4 bg-white shadow-md rounded-md p-4 w-80"
+        className="p-4 w-80 bg-purple-100 border-purple-300 border-dashed border-2 rounded-lg"
       >
         <ToastPrimitive.Title className="font-semibold">{props.title}</ToastPrimitive.Title>
         <ToastPrimitive.Description className="mt-2 text-sm text-gray-700">{props.description}</ToastPrimitive.Description>
-        <ToastPrimitive.Close className="absolute top-2 right-2 text-gray-400 hover:text-gray-700">
-          X
-        </ToastPrimitive.Close>
       </ToastPrimitive.Root>
-      <ToastPrimitive.Viewport />
+      <ToastPrimitive.Viewport className="fixed-center-bottom bottom-5"/>
     </ToastPrimitive.Provider>
   );
 });
