@@ -2,8 +2,10 @@ import * as React from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { animated, useSpring } from '@react-spring/three';
 import { Vector3 } from 'three';
+import useMessageStore from '@/lib/stores/message.store';
 
 const CameraAnimation = () => {
+  const {activeMessageRoomIndex} = useMessageStore();
   const { camera } = useThree();
   const [spring, api] = useSpring(() => ({
     position: [0, -50, 100],

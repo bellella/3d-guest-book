@@ -62,7 +62,7 @@ a {
   }
 
   .input-base {
-    @apply block w-full py-2 px-3 border border-gray-300 focus:border-purple-500 focus:outline-none rounded-lg;
+    @apply block w-full py-2 px-3 border bg-purple-50 border-purple-300 focus:border-purple-500 focus:outline-none rounded-lg;
   }
 
   .label-base {
@@ -76,4 +76,17 @@ a {
   .fixed-center-bottom {
     @apply fixed left-1/2 bottom-0 transform -translate-x-1/2
   }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px); /* 움직임의 범위를 조절할 수 있습니다 */
+  }
+}
+
+.animation-float {
+  animation: float 1.5s infinite; /* 애니메이션 속성: 이름, 지속시간, 반복 횟수 */
 }

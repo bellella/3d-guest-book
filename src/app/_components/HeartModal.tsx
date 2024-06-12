@@ -8,9 +8,9 @@ import Toast, { ToastHandle } from "./Toast";
 import useMessageStore from "@/lib/stores/message.store";
 
 const HeartModal: React.FC = React.memo(() => {
-  const addGuestMessage = useMessageStore((state) => state.addGuestMessage);
+  const {addMessage, currentRoom} = useMessageStore();
 
-  const [formState, action] = useFormState(submitMessage, {});
+  const [formState, action] = useFormState(submitMessage.bind(null, currentRoom()?.id!), {});
   const toastRef = React.useRef<ToastHandle>(null);
   const formRef = React.useRef<HTMLFormElement>(null);
   const [isOpen, setIsOpen] = React.useState(false); // Track the open/close state
@@ -34,11 +34,11 @@ const HeartModal: React.FC = React.memo(() => {
       return;
     }
     if (formState.success) {
-      addGuestMessage(formState.submission);
+      addMessage(formState.submission);
       toastRef.current?.showToast();
       formRef.current?.reset();
     }
-  }, [formState, addGuestMessage]);
+  }, [formState, addMessage]);
   return (
     <>
       <Toast
@@ -57,8 +57,9 @@ const HeartModal: React.FC = React.memo(() => {
         </Dialog.Trigger>
         {isOpen && (
           <Dialog.Portal>
+            <Dialog.Overlay className="fixed inset-0" />
             <Dialog.Content
-              className={`fixed-center bg-purple-200 border-purple-300 border border-dashed border-2 p-6 rounded-lg shadow-lg transition-all ease-out ${
+              className={`w-[90vw] max-w-[350px] fixed-center bg-purple-200 border-purple-300 border border-dashed border-2 p-6 rounded-lg shadow-lg transition-all ease-out ${
                 isClosing ? "animate-slide-down" : "animate-slide-up"
               } focus:outline-none`}
             >
@@ -89,7 +90,6 @@ const HeartModal: React.FC = React.memo(() => {
                 <div className="mt-4 flex justify-center">
                   <button
                     type="submit"
-                    onClick={handleClose}
                     className="px-4 py-2 bg-purple-500 text-purple-100 rounded"
                   >
                     Send

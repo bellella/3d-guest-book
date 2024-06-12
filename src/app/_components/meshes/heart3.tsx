@@ -34,9 +34,10 @@ const Heart3: React.FC<Heart3Props> = ({ name, message, isActive, onClick }) => 
       const position = generateRandomPosition();
       setOriginalPosition(position);
     };
+    updateSize();
 
-    window.addEventListener('resize', updateSize);
-    return () => window.removeEventListener('resize', updateSize);
+    // window.addEventListener('resize', updateSize);
+    // return () => window.removeEventListener('resize', updateSize);
   }, []);
 
   const { floatPosition } = useSpring({
@@ -57,8 +58,8 @@ const Heart3: React.FC<Heart3Props> = ({ name, message, isActive, onClick }) => 
 
   // 랜덤 위치 생성
   function generateRandomPosition(): [number, number, number] {
-    const rangeX = window.innerHeight * 0.05;
-    const rangeY = window.innerWidth * 0.05;
+    const rangeX = window.innerHeight * 0.03;
+    const rangeY = window.innerWidth * 0.03;
     const rangeZ = 50;
 
     const x = (Math.random() - 0.5) * rangeX;

@@ -1,28 +1,51 @@
-'use client'
+"use client";
 import React from "react";
 import GuestCanvas from "../_components/3d/GuestCanvas";
 import HeartModal from "../_components/HeartModal";
 import Version from "../_components/Version";
-import { GuestMessage } from "@prisma/client";
 import useMessageStore from "@/lib/stores/message.store";
+import { Message, MessageRoom } from "@prisma/client";
+import RoomHandler from "../_components/RoomHandler";
 
 export default function GuestbookContainer({
-  guestMessages: OriginalGuestMessages,
+  messages: OriginalMessages,
+  messageRooms,
+  activeMessageRoomIndex,
 }: {
-  guestMessages: GuestMessage[];
+  messages: Message[];
+  messageRooms: MessageRoom[];
+  activeMessageRoomIndex: number;
 }) {
-    const setGuestMessages = useMessageStore((state) => state.setGuestMessages);
+  const {
+    setMessages,
+    setMessageRooms,
+    setActiveMessageRoomIndex,
+    activeMessageIndex,
+  } = useMessageStore();
 
-    React.useEffect(() => {
-        setGuestMessages(OriginalGuestMessages);
-      }, [OriginalGuestMessages, setGuestMessages]);
-//   const [guestMessages, setGuestMessages] = React.useState<GuestMessage[]>(
-//     OriginalGuestMessages
-//   );
+  // const { data, error, isLoading } = useSWR('/api/message', () => {
+  //   return activeMessageIndex ? getMessagesById(messageRooms[activeMessageIndex].id) : [];
+  // }, {active: false});
+
+  React.useEffect(() => {
+    // set original messages and rooms
+    setMessages(OriginalMessages);
+    setMessageRooms(messageRooms);
+    setActiveMessageRoomIndex(activeMessageRoomIndex);
+  }, [
+    OriginalMessages,
+    setMessages,
+    setMessageRooms,
+    setActiveMessageRoomIndex,
+  ]);
+  //   const [guestMessages, setGuestMessages] = React.useState<GuestMessage[]>(
+  //     OriginalGuestMessages
+  //   );
   return (
     <>
+      <RoomHandler />
       <GuestCanvas />
-      <HeartModal/>
+      <HeartModal />
       <Version />
     </>
   );
