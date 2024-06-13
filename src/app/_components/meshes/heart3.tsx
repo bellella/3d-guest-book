@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { a, useSpring } from '@react-spring/three';
 import HeartGeometry from './heart-geometry';
 import { Text } from '@react-three/drei';
+import { ga } from '@/lib/gtag';
 
 interface Heart3Props {
   name: string;
@@ -79,6 +80,10 @@ const Heart3: React.FC<Heart3Props> = ({ name, message, isActive, onClick }) => 
       scale={scale}
       onClick={(e) => {
         e.stopPropagation();
+        ga({
+          action: '메세지 클릭',
+          category: '메세지'
+      });
         if (finished) { // 애니메이션이 끝난 상태일 때만 클릭 허용
         setFinished(false);
           onClick();

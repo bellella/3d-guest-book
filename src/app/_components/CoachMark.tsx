@@ -2,13 +2,17 @@
 import React, { PropsWithChildren } from "react";
 import clsx from "clsx";
 import { HeartIcon } from "@radix-ui/react-icons";
+import { ga } from "@/lib/gtag";
 
 const CoachMark: React.FC = () => {
   React.useEffect(() => {
     const hasSeenCoachmark = localStorage.getItem('seenCoachMark');
     if (!hasSeenCoachmark) {
+        ga({
+            action: '코치마크 시작',
+            category: '코치마크'
+        });
       setShow(true);
-      localStorage.setItem('seenCoachMark', new Date().toDateString());
     }
   }, []);
   const [sceneIndex, setSceneIndex] = React.useState(0);
@@ -20,6 +24,11 @@ const CoachMark: React.FC = () => {
   const clickScene = () => {
     if (sceneIndex >= maxScene - 1) {
       setShow(false);
+      localStorage.setItem('seenCoachMark', new Date().toDateString());
+      ga({
+        action: '코치마크 완료',
+        category: '코치마크'
+    });
     } else {
       setSceneIndex((index) => index + 1);
     }

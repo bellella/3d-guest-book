@@ -1,12 +1,17 @@
 import useMessageStore from "@/lib/stores/message.store";
 import React from "react";
 import clsx from 'clsx';
+import { ga } from "@/lib/gtag";
 
 const RoomHandler: React.FC = () => {
   const { messageRooms, activeMessageRoomIndex, setActiveMessageRoomIndex, getMessageFromApi } = useMessageStore();
   const changeRoom = (index: number) => {
     setActiveMessageRoomIndex(index);
     getMessageFromApi();
+    ga({
+      action: '방 이동',
+      category: '방'
+  });
   }
   return (
     <div className="fixed z-10 top-4 right-5 text-purple-900">

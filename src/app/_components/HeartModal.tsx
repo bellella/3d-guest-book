@@ -6,6 +6,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import Toast, { ToastHandle } from "./Toast";
 import useMessageStore from "@/lib/stores/message.store";
 import { Cross2Icon, EnvelopeClosedIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { ga } from "@/lib/gtag";
 
 const HeartModal: React.FC = React.memo(() => {
   const { addMessage, currentRoom } = useMessageStore();
@@ -37,6 +38,10 @@ const HeartModal: React.FC = React.memo(() => {
       return;
     }
     if (formState.success) {
+      ga({
+        action: '메세지 남기기',
+        category: '메세지'
+    });
       handleClose();
       addMessage(formState.submission);
       toastRef.current?.showToast();
