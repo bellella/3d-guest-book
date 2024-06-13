@@ -52,6 +52,7 @@ const HeartModal: React.FC = React.memo(() => {
       addMessage(formState.submission);
       toastRef.current?.showToast();
       formRef.current?.reset();
+      setSubmitting(false);
     }
   }, [formState, addMessage]);
   return (
