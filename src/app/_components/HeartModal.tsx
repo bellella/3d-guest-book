@@ -5,12 +5,15 @@ import submitMessage from "@/lib/actions/form.action";
 import * as Dialog from "@radix-ui/react-dialog";
 import Toast, { ToastHandle } from "./Toast";
 import useMessageStore from "@/lib/stores/message.store";
-import { Cross2Icon, EnvelopeClosedIcon } from "@radix-ui/react-icons";
+import { Cross2Icon, EnvelopeClosedIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 
 const HeartModal: React.FC = React.memo(() => {
-  const {addMessage, currentRoom} = useMessageStore();
+  const { addMessage, currentRoom } = useMessageStore();
 
-  const [formState, action] = useFormState(submitMessage.bind(null, currentRoom()?.id!), {});
+  const [formState, action, isPending] = useFormState(
+    submitMessage.bind(null, currentRoom()?.id!),
+    {}
+  );
   const toastRef = React.useRef<ToastHandle>(null);
   const formRef = React.useRef<HTMLFormElement>(null);
   const [isOpen, setIsOpen] = React.useState(false); // Track the open/close state
@@ -60,7 +63,7 @@ const HeartModal: React.FC = React.memo(() => {
           <Dialog.Portal>
             <Dialog.Overlay className="fixed inset-0" />
             <Dialog.Content
-              className={`w-[90vw] max-w-[300px] fixed-center bg-purple-200 border-purple-300 border border-dashed border-2 p-6 rounded-lg shadow-lg transition-all ease-out ${
+              className={`z-20 w-[90vw] max-w-[300px] fixed-center bg-purple-200 border-purple-300 border border-dashed border-2 p-6 rounded-lg shadow-lg transition-all ease-out ${
                 isClosing ? "animate-slide-down" : "animate-slide-up"
               } focus:outline-none`}
             >
@@ -78,6 +81,7 @@ const HeartModal: React.FC = React.memo(() => {
                     name="name"
                     className="mt-1 input-base"
                     maxLength={12}
+                    disabled={isPending}
                     required
                   />
                 </div>
@@ -86,14 +90,19 @@ const HeartModal: React.FC = React.memo(() => {
                     Message
                   </label>
                   <label htmlFor=""></label>
-                  <textarea maxLength={150} name="message" className="input-base resize-none" />
+                  <textarea
+                    disabled={isPending}
+                    maxLength={150}
+                    name="message"
+                    className="input-base resize-none"
+                  />
                 </div>
                 <div className="mt-4 flex justify-center">
                   <button
                     type="submit"
                     className="px-4 py-2 bg-purple-500 text-purple-100 rounded"
                   >
-                    Send
+                    {isPending ? <DotsHorizontalIcon className="animate-spin h-5 w-5 text-white" /> : 'Submit'}
                   </button>
                 </div>
                 <button
