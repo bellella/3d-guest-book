@@ -18,7 +18,6 @@ const Toast = React.forwardRef<ToastHandle, ToastProps>((props, ref) => {
   React.useImperativeHandle(ref, () => ({
     showToast() {
       setOpen(true);
-      //setTimeout(() => setOpen(false), 1500);
     }
   }));
 
@@ -27,9 +26,9 @@ const Toast = React.forwardRef<ToastHandle, ToastProps>((props, ref) => {
       <ToastPrimitive.Root
         open={open}
         onOpenChange={setOpen}
-        className="p-4 w-80 bg-purple-100 border-purple-300 border-dashed border-2 rounded-lg"
+        className="card-base p-4 w-80 "
       >
-        <ToastPrimitive.Title className="font-semibold">{props.title}</ToastPrimitive.Title>
+        <ToastPrimitive.Title className="font-semibold text-gray-900">{props.title}</ToastPrimitive.Title>
         <ToastPrimitive.Description className="mt-2 text-sm text-gray-700">{props.description}</ToastPrimitive.Description>
       </ToastPrimitive.Root>
       <ToastPrimitive.Viewport className="fixed-center-bottom bottom-5"/>

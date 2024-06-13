@@ -3,9 +3,9 @@ import React, { useEffect } from "react";
 import { useFormState } from "react-dom";
 import submitMessage from "@/lib/actions/form.action";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Cross2Icon, EnvelopeClosedIcon } from "@radix-ui/react-icons";
 import Toast, { ToastHandle } from "./Toast";
 import useMessageStore from "@/lib/stores/message.store";
+import { Cross2Icon, EnvelopeClosedIcon } from "@radix-ui/react-icons";
 
 const HeartModal: React.FC = React.memo(() => {
   const {addMessage, currentRoom} = useMessageStore();
@@ -34,6 +34,7 @@ const HeartModal: React.FC = React.memo(() => {
       return;
     }
     if (formState.success) {
+      handleClose();
       addMessage(formState.submission);
       toastRef.current?.showToast();
       formRef.current?.reset();
@@ -44,7 +45,7 @@ const HeartModal: React.FC = React.memo(() => {
       <Toast
         ref={toastRef}
         title="Thank you!"
-        description="Buy me a coffee or donate 3d models"
+        description="You made my day 🩷"
       />
       <Dialog.Root open={isOpen}>
         <Dialog.Trigger asChild>
@@ -59,7 +60,7 @@ const HeartModal: React.FC = React.memo(() => {
           <Dialog.Portal>
             <Dialog.Overlay className="fixed inset-0" />
             <Dialog.Content
-              className={`w-[90vw] max-w-[350px] fixed-center bg-purple-200 border-purple-300 border border-dashed border-2 p-6 rounded-lg shadow-lg transition-all ease-out ${
+              className={`w-[90vw] max-w-[300px] fixed-center bg-purple-200 border-purple-300 border border-dashed border-2 p-6 rounded-lg shadow-lg transition-all ease-out ${
                 isClosing ? "animate-slide-down" : "animate-slide-up"
               } focus:outline-none`}
             >

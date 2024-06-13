@@ -9,7 +9,7 @@ const RoomHandler: React.FC = () => {
     getMessageFromApi();
   }
   return (
-    <div className="fixed z-10 top-4 right-8 text-purple-900">
+    <div className="fixed z-10 top-4 right-5 text-purple-900">
       <div className="flex gap-3">
       {messageRooms.map((room, index) => (
         <button 
