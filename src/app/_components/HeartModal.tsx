@@ -124,6 +124,7 @@ const HeartModal: React.FC = React.memo(() => {
                 </div>
                 <button
                   type="button"
+                  onClick={() => handleClose()}
                   className="absolute top-2 right-2 p-1"
                 >
                   <Cross2Icon color="purple"></Cross2Icon>

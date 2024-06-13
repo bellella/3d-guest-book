@@ -4,8 +4,9 @@ import clsx from 'clsx';
 import { ga } from "@/lib/gtag";
 
 const RoomHandler: React.FC = () => {
-  const { messageRooms, activeMessageRoomIndex, setActiveMessageRoomIndex, getMessageFromApi } = useMessageStore();
+  const { messageRooms, setActiveMessageIndex,  activeMessageRoomIndex, setActiveMessageRoomIndex, getMessageFromApi } = useMessageStore();
   const changeRoom = (index: number) => {
+    setActiveMessageIndex(null);
     setActiveMessageRoomIndex(index);
     getMessageFromApi();
     ga({
