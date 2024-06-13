@@ -6,8 +6,7 @@ import CoachMark from "../_components/CoachMark";
 export default async function Home() {
   // get message rooms and generate random index
   const messageRooms = await getMessageRooms();
-  const randomIndex = Math.floor(Math.random() * messageRooms.length);
-  console.log(randomIndex,'randoe')
+  const randomIndex = Math.ceil(Math.random() * messageRooms.length) - 1;
   // get messages
   const messages = await getMessagesByRoomId(messageRooms[randomIndex].id);
   // generate random index of the rooms

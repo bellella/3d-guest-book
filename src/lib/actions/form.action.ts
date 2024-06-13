@@ -14,17 +14,15 @@ const guestMessageSchema = z.object({
 
 export default async function submitMessage(roomId: string, prevState: any, formData: FormData): Promise<any> {
   try {
-
     const data = {
       name: formData.get('name')?.toString() ?? '',
       message: formData.get('message')?.toString() ?? '',
       ip: headers().get("x-forwarded-for"),
       roomId
     };
-
     // Zod로 검증
     const validatedData = guestMessageSchema.parse(data);
-
+    
     const submission = await createMessage(validatedData);
 
     return { success: true, message: 'Form submitted successfully', submission };
